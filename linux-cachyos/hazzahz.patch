@@ -1,0 +1,26 @@
+diff --git a/kernel/Kconfig.hz b/kernel/Kconfig.hz
+--- a/kernel/Kconfig.hz
++++ b/kernel/Kconfig.hz
+@@ -43,6 +43,16 @@ config HZ_750
+ 	 on desktops with good smoothness without increasing CPU power
+ 	 consumption and sacrificing the battery life on laptops.
+ 
++	config HZ_800
++		bool "800 HZ"
++	help
++	 800 Hz is a high-frequency timer tick intended for low-latency
++	 interactive workloads on modern CPUs. It can slightly reduce
++	 worst-case wakeup and input latency compared to 750 Hz at the
++	 cost of a modest increase in timer interrupt overhead. This is
++	 suitable for single-user, latency-sensitive desktops and gaming
++	 systems where power efficiency is a non-goal.
++
+ 	config HZ_1000
+ 		bool "1000 HZ"
+ 	help
+@@ -57,4 +67,5 @@ config HZ
+ 	default 500 if HZ_500
+ 	default 600 if HZ_600
+ 	default 750 if HZ_750
++	default 800 if HZ_800
+ 	default 1000 if HZ_1000

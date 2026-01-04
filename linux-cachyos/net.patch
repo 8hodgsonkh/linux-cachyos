@@ -1,0 +1,20 @@
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_cfg.h
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_cfg.h
+@@ -15,2 +15,2 @@
+-#define AQ_CFG_TXDS_DEF    4096U
+-#define AQ_CFG_RXDS_DEF    2048U
++#define AQ_CFG_TXDS_DEF    1024U
++#define AQ_CFG_RXDS_DEF    512U
+@@
+-#define AQ_CFG_TXDS_DEF    4096U
+-#define AQ_CFG_RXDS_DEF    2048U
++#define AQ_CFG_TXDS_DEF    1024U
++#define AQ_CFG_RXDS_DEF    512U
+ #define AQ_CFG_VECS_DEF    8U
+-#define AQ_CFG_IS_LRO_DEF  1U
++#define AQ_CFG_IS_LRO_DEF  0U
+#@@
+#-#define AQ_CFG_INTERRUPT_MODERATION_OFF   0
+#-#define AQ_CFG_INTERRUPT_MODERATION_ON    1
+#+#define AQ_CFG_INTERRUPT_MODERATION_OFF   1
+#+#define AQ_CFG_INTERRUPT_MODERATION_ON    0

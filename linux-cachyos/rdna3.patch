@@ -1,0 +1,49 @@
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+index 1c723593..773bd20e 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
+@@ -45,6 +45,7 @@
+ #include "asic_reg/mp/mp_13_0_2_sh_mask.h"
+ #include "asic_reg/smuio/smuio_13_0_2_offset.h"
+ #include "asic_reg/smuio/smuio_13_0_2_sh_mask.h"
++#include "smu13_driver_if_v13_0_7.h"
+ 
+ /*
+  * DO NOT use these for err/warn/info/debug messages.
+@@ -1607,11 +1608,14 @@ int smu_v13_0_set_performance_level(struct smu_context *smu,
+ 	uint32_t fclk_min = 0, fclk_max = 0;
+ 	int ret = 0, i;
+ 	bool auto_level = false;
++	OverDriveTableExternal_t *od_table = (OverDriveTableExternal_t *)smu->smu_table.overdrive_table;
+ 
+ 	switch (level) {
+ 	case AMD_DPM_FORCED_LEVEL_HIGH:
+-		sclk_min = sclk_max = gfx_table->max;
+-		mclk_min = mclk_max = mem_table->max;
++		sclk_min = od_table->OverDriveTable.GfxclkFmin;
++		sclk_max = od_table->OverDriveTable.GfxclkFmax;
++		mclk_min = mem_table->min;
++		mclk_max = od_table->OverDriveTable.UclkFmax;
+ 		socclk_min = socclk_max = soc_table->max;
+ 		vclk_min = vclk_max = vclk_table->max;
+ 		dclk_min = dclk_max = dclk_table->max;
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+index c8f4f6fb..c322dfaa 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c
+@@ -608,13 +608,13 @@ static int smu_v13_0_7_set_default_dpm_table(struct smu_context *smu)
+ 		if (ret)
+ 			return ret;
+ 
+-		if (skutable->DriverReportedClocks.GameClockAc &&
++		/*if (skutable->DriverReportedClocks.GameClockAc &&
+ 			(dpm_table->dpm_levels[dpm_table->count - 1].value >
+ 			skutable->DriverReportedClocks.GameClockAc)) {
+ 			dpm_table->dpm_levels[dpm_table->count - 1].value =
+ 				skutable->DriverReportedClocks.GameClockAc;
+ 			dpm_table->max = skutable->DriverReportedClocks.GameClockAc;
+-		}
++		}*/
+ 	} else {
+ 		dpm_table->count = 1;
+ 		dpm_table->dpm_levels[0].value = smu->smu_table.boot_values.gfxclk / 100;
